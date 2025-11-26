@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chakra Code Geboortedatum Analyse – nieuwealchemist.nl</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+    .app {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+    h1, h2, h3, h4 {
+      color: #fbbf24;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-size: 1.9rem;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      font-size: 1.3rem;
+      border-bottom: 1px solid #1f2937;
+      padding-bottom: 0.3rem;
+    }
+    h3 {
+      font-size: 1.1rem;
+      margin-top: 1rem;
+    }
+    h4 {
+      font-size: 1rem;
+      margin-top: 0.8rem;
+    }
+    p {
+      margin: 0.25rem 0 0.7rem;
+    }
+    .card {
+      background: #020617;
+      border-radius: 0.75rem;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.55);
+      border: 1px solid #1e293b;
+    }
+    .input-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: flex-end;
+      margin-bottom: 1rem;
+    }
+    label {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    input[type="date"],
+    input[type="text"],
+    input[type="email"] {
+      padding: 0.4rem 0.6rem;
+      border-radius: 0.4rem;
+      border: 1px solid #4b5563;
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 0.9rem;
+      min-width: 180px;
+    }
+    input[type="date"]:focus,
+    input[type="text"]:focus,
+    input[type="email"]:focus {
+      outline: 2px solid #fbbf24;
+      outline-offset: 1px;
+      border-color: #fbbf24;
+    }
+    button {
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, #f97316, #facc15);
+      color: #111827;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      box-shadow: 0 10px 25px rgba(250, 204, 21, 0.35);
+      white-space: nowrap;
+    }
+    button.secondary {
+      background: #020617;
+      color: #e5e7eb;
+      border: 1px solid #4b5563;
+      box-shadow: none;
+    }
+    button:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 15px rgba(250, 204, 21, 0.25);
+    }
+    .error {
+      color: #fecaca;
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+    .tagline {
+      font-size: 0.95rem;
+      color: #9ca3af;
+      margin-bottom: 1rem;
+    }
+    .pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 0.1rem 0.6rem;
+      font-size: 0.75rem;
+      background: #111827;
+      border: 1px solid #374151;
+      margin-right: 0.25rem;
+      margin-bottom: 0.25rem;
+    }
+    .section {
+      margin-top: 1.5rem;
+      padding-top: 0.5rem;
+    }
+    .small {
+      font-size: 0.82rem;
+      color: #9ca3af;
+    }
+    ul {
+      margin: 0.25rem 0 0.8rem 1.25rem;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 0.2rem;
+    }
+    .muted {
+      color: #9ca3af;
+      font-size: 0.85rem;
+    }
+    .actions-below {
+      margin-top: 0.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .report-footer {
+      margin-top: 1.25rem;
+      border-top: 1px solid #1f2937;
+      padding-top: 0.5rem;
+      font-size: 0.8rem;
+      color: #9ca3af;
+      text-align: right;
+    }
+    .divider {
+      border-top: 1px dashed #1f2937;
+      margin: 1.25rem 0 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .input-row {
+        justify-content: flex-start;
+      }
+    }
+
+    /* PRINT / PDF STYLESHEET – DeLuxe lay-out */
+    @media print {
+      @page {
+        margin: 20mm;
+      }
+      body {
+        background: #ffffff;
+        color: #000000;
+      }
+      .app {
+        max-width: 100%;
+        padding: 0;
+      }
+      .card {
+        box-shadow: none;
+        border-radius: 0;
+        border: none;
+        padding: 0;
+      }
+      .app > .card:first-child,
+      #reportActions {
+        display: none !important; /* geen invoer & knoppen in PDF */
+      }
+      h1, h2, h3, h4 {
+        color: #111827 !important;
+      }
+      .pill {
+        border-color: #9ca3af;
+        background: #f3f4f6;
+        color: #111827;
+      }
+      .report-footer {
+        color: #6b7280;
+        border-top-color: #d1d5db;
+      }
+      a {
+        color: #111827;
+        text-decoration: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <div class="card">
+      <h1>Chakra Code Geboortedatum Analyse</h1>
+      <p class="tagline">
+        Ontvang een <strong>uitgebreid, DeLuxe persoonlijk rapport</strong> op basis van je geboortedatum:
+        kerncijfers, chakra-profiel, psychologische duiding én een verhalende samenvatting.
+      </p>
+
+      <div class="input-row">
+        <div>
+          <label for="dob">Geboortedatum</label><br />
+          <input type="date" id="dob" />
+        </div>
+        <div>
+          <label for="name">Naam (optioneel)</label><br />
+          <input type="text" id="name" placeholder="Bijv. Emma, Jan, ..." />
+        </div>
+        <div>
+          <label for="email">E-mailadres (optioneel)</label><br />
+          <input type="email" id="email" placeholder="rapport naar dit adres..." />
+        </div>
+        <div>
+          <button id="analyzeBtn" type="button">
+            🔮 Genereer DeLuxe analyse
+          </button>
+        </div>
+      </div>
+      <div id="error" class="error" style="display:none;"></div>
+      <p class="small">
+        Deze tool draait volledig in je browser. Er worden geen gegevens opgeslagen of doorgestuurd.
+        De e-mailknop opent alleen je eigen e-mailprogramma met een conceptbericht.
+      </p>
+    </div>
+
+    <div id="report" class="card section" style="margin-top:1.5rem; display:none;"></div>
+
+    <div id="reportActions" class="actions-below" style="display:none;">
+      <button id="printBtn" type="button" class="secondary">🖨 Printen / Exporteer als PDF</button>
+      <button id="emailBtn" type="button" class="secondary">✉ Stuur samenvatting per e-mail</button>
+    </div>
+  </main>
+
+  <script>
+    // --- DATA VOOR INTERPRETATIE ---
+
+    const chakraMeta = {
+      1: {
+        naam: "1 – Wortelchakra",
+        kern: "basis, veiligheid, structuur, lichamelijke aanwezigheid",
+        kracht: "je bent nuchter, praktisch, betrouwbaar en geeft anderen een gevoel van stabiliteit.",
+        groei: "verandering kan spannend zijn; je mag leren dat nieuwe stappen óók veiligheid kunnen brengen."
+      },
+      2: {
+        naam: "2 – Sacraalchakra",
+        kern: "emoties, verbinding, creativiteit, sensualiteit",
+        kracht: "je voelt veel, hebt oog voor sfeer en verbindt graag op een persoonlijke en zachte manier.",
+        groei: "je mag leren om je eigen grenzen te voelen en bewaren, zodat je niet leegloopt of overprikkeld raakt."
+      },
+      3: {
+        naam: "3 – Zonnevlecht",
+        kern: "wilskracht, richting, identiteit, eigenwaarde",
+        kracht: "je hebt een natuurlijke innerlijke kracht en je kunt richting en focus aan je leven geven.",
+        groei: "zelfkritiek en perfectionisme mogen zachter; je hoeft het niet perfect te doen om goed genoeg te zijn."
+      },
+      4: {
+        naam: "4 – Hartchakra",
+        kern: "liefde, empathie, zachtheid, menselijkheid",
+        kracht: "je bent loyaal, warm en je hart staat open voor mensen die je toelaat in je kring.",
+        groei: "je mag leren ontvangen en niet alleen geven, zodat je hart niet uitgeput raakt."
+      },
+      5: {
+        naam: "5 – Keelchakra",
+        kern: "communicatie, waarheid, jezelf uitspreken",
+        kracht: "je hebt een sterke innerlijke waarheid en de potentie om helder en oprecht te spreken.",
+        groei: "je mag jezelf eerder laten horen, ook als je woorden nog niet perfect zijn."
+      },
+      6: {
+        naam: "6 – Derde Oog",
+        kern: "inzicht, intuïtie, overzicht, innerlijke visie",
+        kracht: "je ziet patronen en begrijpt dingen vaak sneller dan je kunt uitleggen; je innerlijke kompas is sterk.",
+        groei: "je mag minder blijven hangen in overdenken en meer vertrouwen op je eerste gevoel."
+      },
+      7: {
+        naam: "7 – Kruinchakra",
+        kern: "bewustzijn, zingeving, reflectie, hogere visie",
+        kracht: "je denkt graag diep na, zoekt naar betekenis en leert veel van je ervaringen.",
+        groei: "je mag ook landen in je lichaam en het leven af en toe wat lichter nemen."
+      },
+      8: {
+        naam: "8 – Krachtcentrum / Aura",
+        kern: "verantwoordelijkheid, grenzen, leiderschap, draagkracht",
+        kracht: "je hebt een sterke ruggengraat, mensen voelen zich veilig bij je en vertrouwen op jouw stabiliteit.",
+        groei: "je mag minder dragen; niet alles en iedereen is jouw verantwoordelijkheid."
+      },
+      9: {
+        naam: "9 – Bronchakra",
+        kern: "wijsheid, afronding, zielsdiepte, levenslessen",
+        kracht: "je hebt een natuurlijke diepgang en begrijpt de grotere lijnen van het leven.",
+        groei: "je mag leren om de pijn van anderen niet volledig in je eigen systeem op te slaan."
+      }
+    };
+
+    const zeroMeta = {
+      kern: "gevoeligheid, open potentieel, innerlijke ruimte",
+      uitleg: "De 0 staat niet voor een chakra, maar voor open ruimte en potentieel. Ze versterkt andere cijfers en wijst op gevoeligheid en ontvankelijkheid voor energie van buitenaf."
+    };
+
+    // --- HULPFUNCTIES VOOR BEREKENING ---
+
+    function digitSum(n) {
+      let s = n;
+      while (s > 9) {
+        s = String(s).split("").map(d => parseInt(d, 10)).reduce((a, b) => a + b, 0);
+      }
+      return s;
+    }
+
+    function formatDateDisplay(isoStr) {
+      const [y, m, d] = isoStr.split("-");
+      return `${d}-${m}-${y}`;
+    }
+
+    function analyzeDate(isoDate, name) {
+      const clean = isoDate.replace(/\D/g, "");
+      const digits = clean.split("").map(d => parseInt(d, 10));
+      if (digits.length < 6) {
+        throw new Error("Ongeldige geboortedatum.");
+      }
+
+      const firstSum = digits.reduce((a, b) => a + b, 0);
+      const baseChakra = digitSum(firstSum);
+
+      const counts = Array(10).fill(0);
+      digits.forEach(d => counts[d]++);
+
+      const firstSumStr = String(firstSum);
+      const boven = firstSumStr.length > 1 ? parseInt(firstSumStr[0], 10) : baseChakra;
+      const onder = firstSumStr.length > 1 ? parseInt(firstSumStr[1], 10) : null;
+
+      return {
+        name,
+        isoDate,
+        dateDisplay: formatDateDisplay(isoDate),
+        digits,
+        firstSum,
+        baseChakra,
+        counts,
+        boven,
+        onder
+      };
+    }
+
+    // --- RAPPORT-ONDERDELEN ---
+
+    // Sectie 1: Kerncijfers & Chakra Code
+    function section1_core(data) {
+      const { name, dateDisplay, digits, firstSum, baseChakra, counts, boven, onder } = data;
+      const displayName = name && name.trim() ? name.trim() : "Deze persoon";
+
+      // verdeling
+      let pills = "";
+      for (let i = 1; i <= 9; i++) {
+        pills += `<span class="pill">${i}: ${counts[i]}×</span>`;
+      }
+      const zeroPill = `<span class="pill">0: ${counts[0]}×</span>`;
+
+      const sterke = [];
+      const stabiel = [];
+      const ontbreekt = [];
+      for (let i = 1; i <= 9; i++) {
+        if (counts[i] >= 2) sterke.push(i);
+        else if (counts[i] === 1) stabiel.push(i);
+        else ontbreekt.push(i);
+      }
+
+      const baseMeta = chakraMeta[baseChakra];
+
+      let bovenTxt = chakraMeta[boven] ? chakraMeta[boven].kern : "";
+      let onderTxt = onder && chakraMeta[onder] ? chakraMeta[onder].kern : null;
+
+      return `
+        <h2>Sectie 1 – Kerncijfers & Chakra Code</h2>
+        <p><strong>Naam (optioneel):</strong> ${displayName}</p>
+        <p><strong>Geboortedatum:</strong> ${dateDisplay}</p>
+        <p><strong>Cijfers van de geboortedatum:</strong> ${digits.join(", ")}</p>
+        <p><strong>Eerste som (alle cijfers samen):</strong> ${firstSum}</p>
+        <p><strong>Basischakra (reductie van de som):</strong> ${baseChakra}</p>
+
+        <h3>1.1 Basischakra</h3>
+        <p><strong>${baseMeta.naam}</strong></p>
+        <p><strong>Kernenergie:</strong> ${baseMeta.kern}</p>
+        <p>Dit basischakra vormt de rode draad in je leven. Het is de energie waar je steeds naar terugkeert, juist wanneer je onder druk staat, bij grote keuzes of in periodes van verandering. Het kleurt je instinctieve reacties, je natuurlijke houding en de manier waarop je jezelf als mens ervaart.</p>
+
+        <h3>1.2 Eerste som – boven- en onderstroom</h3>
+        <p><strong>Eerste som:</strong> ${firstSum}</p>
+        <p><strong>Bovenstroom (${boven}):</strong> ${bovenTxt}</p>
+        ${onder !== null ? `
+          <p><strong>Onderstroom (${onder}):</strong> ${onderTxt}</p>
+          <p>De bovenstroom laat zien welk thema zichtbaar voorop loopt in je leven – hoe je overkomt, hoe je dingen aanpakt. De onderstroom vertelt meer over wat er in je binnenwereld verscholen ligt, wat je onderweg te leren hebt en welke gevoeligheden je stap voor stap mag omarmen.</p>
+        ` : `
+          <p>Je eerste som is een enkel cijfer. Dat betekent dat je basischakra en je levenslading sterk met elkaar verweven zijn. Je levenspad en je kernenergie liggen relatief dicht bij elkaar.</p>
+        `}
+
+        <h3>1.3 Chakra-verdeling – jouw energiekaart</h3>
+        <p>${pills} ${zeroPill}</p>
+        <p>Deze verdeling laat zien welke chakra-thema&#39;s extra nadruk krijgen in je leven, welke stabiel aanwezig zijn en welke zich vooral via ervaring ontwikkelen.</p>
+        ${sterke.length ? `<p><strong>Sterk aanwezige chakra&#39;s:</strong> ${sterke.join(", ")} – dit zijn thema&#39;s die duidelijk meespelen in je gedrag, persoonlijkheid en keuzes.</p>` : ""}
+        ${stabiel.length ? `<p><strong>Stabiele chakra&#39;s:</strong> ${stabiel.join(", ")} – hier is vaak een natuurlijke balans; deze energieën zijn er, zonder extreme uitschieters.</p>` : ""}
+        ${ontbreekt.length ? `<p><strong>Ontbrekende chakra&#39;s:</strong> ${ontbreekt.join(", ")} – deze kwaliteiten worden meestal ontwikkeld via levenservaring, relaties en uitdagingen. Het zijn geen tekorten, maar leergebieden.</p>` : ""}
+        ${counts[0] > 0 ? `<p><strong>0-energie (${counts[0]}×):</strong> ${zeroMeta.uitleg}</p>` : ""}
+        <div class="divider"></div>
+      `;
+    }
+
+    // Sectie 2: Energieprofiel – kracht & schaduw
+    function section2_energy(data) {
+      const { counts, baseChakra } = data;
+
+      const krachtBullets = [];
+      const schaduwBullets = [];
+
+      // Krachten uit dominante cijfers
+      for (let i = 1; i <= 9; i++) {
+        if (counts[i] >= 2) {
+          const meta = chakraMeta[i];
+          krachtBullets.push(`<li><strong>${meta.naam}:</strong> ${meta.kracht}</li>`);
+        }
+      }
+      // Basischakra altijd als kracht benoemen
+      if (chakraMeta[baseChakra]) {
+        krachtBullets.push(`<li><strong>Basischakra ${baseChakra}:</strong> ${chakraMeta[baseChakra].kracht}</li>`);
+      }
+      // 0-energie als kracht
+      if (counts[0] >= 2) {
+        krachtBullets.push(`<li><strong>0-energie:</strong> je hebt een grote gevoeligheid voor subtiele signalen, intuïtie en sfeer. Dat maakt je fijngevoelig en vaak ook opmerkzaam voor wat anderen niet doorhebben.</li>`);
+      } else if (counts[0] === 1) {
+        krachtBullets.push(`<li><strong>0-energie:</strong> je hebt een open, ontvankelijke kant die je helpt om tussen de regels door te voelen wat er speelt.</li>`);
+      }
+      if (!krachtBullets.length) {
+        krachtBullets.push(`<li>Je kracht lijkt te liggen in een brede balans; er is geen enkel thema dat extreem domineert. Dit geeft flexibiliteit en aanpassingsvermogen.</li>`);
+      }
+
+      // Schaduw / groei
+      for (let i = 1; i <= 9; i++) {
+        if (counts[i] === 0) {
+          const meta = chakraMeta[i];
+          schaduwBullets.push(`<li><strong>${meta.naam} (groei):</strong> ${meta.groei}</li>`);
+        }
+      }
+      if (counts[8] >= 2) {
+        schaduwBullets.push(`<li><strong>Veel 8-energie:</strong> je kunt de neiging hebben om meer te dragen dan eigenlijk gezond is. Je mag vaker stilstaan bij de vraag: “Wat is wél van mij – en wat niet?”</li>`);
+      }
+      if (counts[4] >= 2) {
+        schaduwBullets.push(`<li><strong>Veel 4-energie:</strong> je hart is groot en gul, maar kan zichzelf vergeten. Leren ontvangen en grenzen voelen is hier een belangrijke sleutel.</li>`);
+      }
+      if (counts[0] >= 3) {
+        schaduwBullets.push(`<li><strong>Veel 0-energie:</strong> je bent zeer gevoelig en open voor indrukken. Extra gronding, rust en lichaamsbewustzijn helpen je om niet overspoeld te raken.</li>`);
+      }
+      if (!schaduwBullets.length) {
+        schaduwBullets.push(`<li>Je schaduw lijkt vooral te liggen in het vinden van balans tussen geven en ontvangen, denken en voelen, actie en rust. Kleine, bewuste keuzes hebben hier veel impact.</li>`);
+      }
+
+      return `
+        <h2>Sectie 2 – Energieprofiel: krachtvelden & groeipunten</h2>
+        <h3>2.1 Jouw belangrijkste krachtvelden</h3>
+        <p>Onderstaande punten beschrijven waar je natuurlijke energie het sterkst tot uitdrukking komt. Dit zijn kwaliteiten die je vaak al van jongs af aan met je meedraagt.</p>
+        <ul>
+          ${krachtBullets.join("")}
+        </ul>
+
+        <h3>2.2 Schaduwkant – zachte groeigebieden</h3>
+        <p>Schaduw is geen fout, maar een gebied waar je meer spanning, twijfel of herhaling kunt ervaren. Deze thema&#39;s nodigen je uit tot groei, zelfzorg en bewustwording.</p>
+        <ul>
+          ${schaduwBullets.join("")}
+        </ul>
+        <p>Zie deze schaduwkanten als een kompas: ze laten niet zien wat je “niet goed doet”, maar waar je ziel blijkbaar verdieping zoekt. Vaak liggen hier op termijn juist je grootste kwaliteiten.</p>
+        <div class="divider"></div>
+      `;
+    }
+
+    // Sectie 3: Emotie, relaties, innerlijk kind
+    function section3_psychology(data) {
+      const { counts, baseChakra } = data;
+
+      const aanwezig2 = counts[2] > 0;
+      const aanwezig4 = counts[4] > 0;
+      const aanwezig5 = counts[5] > 0;
+      const veel0 = counts[0] >= 2;
+
+      // Emotioneel profiel
+      let hoeVoelt = [];
+      let hoeVerwerkt = [];
+      let opent = [];
+      let sluit = [];
+      let nodig = [];
+
+      if (aanwezig2 || aanwezig4) {
+        hoeVoelt.push("je binnenwereld rijk, gevoelig en vaak gelaagd is.");
+        hoeVerwerkt.push("je ervaringen deels via je gevoel en deels via nadenken verwerkt. Emotie zakt bij jou in laagjes in.");
+        opent.push("echte verbinding, zachtheid en mensen die werkelijk willen luisteren.");
+        nodig.push("ruimte om te voelen zonder dat je meteen hoeft te presteren of door te gaan.");
+      } else {
+        hoeVoelt.push("je gevoel vaak eerst als lichaamssensatie of gedachte verschijnt, en pas later als duidelijke emotie.");
+        hoeVerwerkt.push("je de neiging hebt om eerst te structureren, begrijpen en ordenen voordat je echt voelt wat iets met je doet.");
+        nodig.push("duidelijkheid, tijd en veilige situaties om te onderzoeken wat er vanbinnen leeft.");
+      }
+
+      if (aanwezig5) {
+        hoeVerwerkt.push("woorden en gesprekken een sleutelrol spelen in het verwerken van wat je meemaakt.");
+        opent.push("eerlijk, rustig en gelijkwaardig contact waarin je mag zeggen wat er is.");
+        sluit.push("situaties waarin je het gevoel hebt dat er geen ruimte is voor jouw waarheid.");
+      } else {
+        sluit.push("druk om te praten voordat je je veilig of helder genoeg voelt.");
+      }
+
+      if (veel0) {
+        hoeVoelt.push("je makkelijk sfeer, spanning en onderstromen oppikt, ook als er niets wordt gezegd.");
+        nodig.push("voldoende stilte, tijd alleen en fysieke rust om alle indrukken te kunnen laten zakken.");
+      }
+
+      if (baseChakra === 6 || baseChakra === 7) {
+        hoeVerwerkt.push("je vaak via inzicht en reflectie tot emotionele helderheid komt: als je het begrijpt, voelt het rustiger.");
+      }
+
+      // Relationeel profiel
+      const veel1 = counts[1] >= 2;
+      const veel4 = counts[4] >= 1;
+      const veel8 = counts[8] >= 1;
+      const heeft2 = counts[2] > 0;
+      const heeft5 = counts[5] > 0;
+
+      let liefdesstijl = [];
+      let geef = [];
+      let ontvang = [];
+      let veilig = [];
+      let spanning = [];
+      let groei = [];
+
+      if (veel1 || veel8) {
+        liefdesstijl.push("je liefde zich uit in stabiliteit, aanwezigheid en verantwoordelijkheid.");
+        geef.push("je bent iemand op wie men kan bouwen; je laat liefde zien door te zorgen, te regelen en er echt te zijn.");
+        veilig.push("duidelijke afspraken, voorspelbaarheid en mensen die menen wat ze zeggen.");
+      }
+      if (veel4 || heeft2) {
+        liefdesstijl.push("je verlangt naar verbinding op hartniveau; relaties moeten voor jou kloppen van binnenuit.");
+        geef.push("je toont zorg, empathie en aandacht voor de binnenwereld van de ander.");
+        ontvang.push("je ontvangt liefde het liefst in de vorm van tijd, oprechte aandacht en emotionele beschikbaarheid.");
+      }
+      if (heeft5) {
+        liefdesstijl.push("eerlijkheid en open communicatie belangrijk zijn in je relaties.");
+        geef.push("je bent bereid om in gesprek te gaan over wat er speelt, zeker als het echt belangrijk is.");
+        spanning.push("spelletjes, onduidelijke signalen en mensen die niet uitspreken wat ze bedoelen.");
+      } else {
+        groei.push("jezelf vaker uit te spreken over je behoeften, zelfs als dat spannend of nieuw is.");
+      }
+      if (veel0) {
+        spanning.push("relaties met veel drama, wisselende stemmingen of onvoorspelbare uitbarstingen.");
+        veilig.push("mensen die rustig, consistent en energetisch veilig aanvoelen.");
+      }
+      if (!liefdesstijl.length) {
+        liefdesstijl.push("je relaties stap voor stap en met een zekere voorzichtigheid aangaat. Je vertrouwt liever op daden dan op grote woorden.");
+      }
+      if (!groei.length) {
+        groei.push("balans vinden tussen zorgen voor anderen en trouw blijven aan je eigen energie.");
+      }
+
+      // Innerlijk kind
+      const veel8_1 = counts[8] >= 2 || counts[1] >= 2;
+      const heeft2_4 = counts[2] > 0 || counts[4] > 0;
+
+      let kindVoelt = [];
+      let kindNodig = [];
+      let belofte = [];
+
+      if (veel8_1) {
+        kindVoelt.push("al vroeg verantwoordelijk, alsof je sterk moest zijn en niet volledig mocht leunen.");
+        kindNodig.push("de erkenning dat jij nu niet alles meer alleen hoeft op te lossen.");
+      }
+      if (heeft2_4) {
+        kindVoelt.push("gevoelig, met een verlangen om echt gezien en begrepen te worden.");
+        kindNodig.push("zachtheid, warmte en iemand die luistert zonder meteen te oordelen.");
+      }
+      if (veel0) {
+        kindVoelt.push("erg open voor sfeer en energie, wat soms overweldigend kan zijn geweest.");
+        kindNodig.push("rust, voorspelbaarheid en plekken waar je volledig jezelf mocht zijn.");
+      }
+      if (!kindVoelt.length) {
+        kindVoelt.push("waarschijnlijk serieuzer of observerend, alsof je meer keek dan deelnam.");
+        kindNodig.push("ruimte om jouw tempo, jouw manier van voelen en jouw eigenheid te eren.");
+      }
+
+      belofte.push("Ik zal beter naar je luisteren en je gevoelens serieus nemen.");
+      belofte.push("Ik zal ruimte maken voor rust, spel en zachtheid, ook als er veel te doen is.");
+      belofte.push("Ik zal niet meer van je eisen dat je alles perfect doet om geliefd te mogen zijn.");
+
+      return `
+        <h2>Sectie 3 – Emotionele blauwdruk, relaties & innerlijk kind</h2>
+
+        <h3>3.1 Emotionele blauwdruk</h3>
+        <p><strong>Hoe je meestal voelt:</strong> ${hoeVoelt.join(" ")}</p>
+        <p><strong>Hoe je meestal verwerkt:</strong> ${hoeVerwerkt.join(" ")}</p>
+        <p><strong>Wat je opent (wat veilig voelt):</strong> ${opent.join(" ") || "echte aandacht, rustige energie en mensen die je niet onder druk zetten."}</p>
+        <p><strong>Wat je sluit (wat spanning geeft):</strong> ${sluit.join(" ") || "chaos, onvoorspelbare reacties en druk om snel te reageren."}</p>
+        <p><strong>Wat je nodig hebt om emotioneel in balans te blijven:</strong> ${nodig.join(" ")}</p>
+
+        <h3>3.2 Relationele energie & verbinding</h3>
+        <p><strong>Jouw liefdesstijl:</strong> ${liefdesstijl.join(" ")}</p>
+        <p><strong>Hoe je liefde geeft:</strong> ${geef.join(" ") || "vooral via daden, betrouwbaarheid en door er consistent voor anderen te zijn."}</p>
+        <p><strong>Hoe je liefde ontvangt:</strong> ${ontvang.join(" ") || "je mag leren om jezelf meer toe te staan om steun, aandacht en zorg te ontvangen."}</p>
+        <p><strong>Wat je veiligheid geeft in relaties:</strong> ${veilig.join(" ") || "mensen die eerlijk, rustig en voorspelbaar zijn in hun gedrag."}</p>
+        <p><strong>Wat je spanning geeft in relaties:</strong> ${spanning.join(" ") || "onuitgesproken spanning, dubbele boodschappen en emotionele druk."}</p>
+        <p><strong>Jouw groei in relaties:</strong> ${groei.join(" ")}</p>
+
+        <h3>3.3 Innerlijk kind – de zachte laag onder alles</h3>
+        <p><strong>Hoe jouw innerlijk kind zich (symbolisch) heeft kunnen voelen:</strong> ${kindVoelt.join(" ")}</p>
+        <p><strong>Wat dit deel van jou nu vooral nodig heeft:</strong> ${kindNodig.join(" ")}</p>
+        <p><strong>Innerlijk-kind belofte aan jezelf:</strong></p>
+        <ul>
+          ${belofte.map(b => `<li>${b}</li>`).join("")}
+        </ul>
+        <div class="divider"></div>
+      `;
+    }
+
+    // Sectie 4: DeLuxe verhalende samenvatting
+    function section4_deluxe(data) {
+      const { name, baseChakra, counts, firstSum } = data;
+      const displayName = name && name.trim() ? name.trim() : "Je";
+      const baseMeta = chakraMeta[baseChakra];
+
+      const veel1 = counts[1] >= 2;
+      const veel8 = counts[8] >= 1;
+      const heeft4 = counts[4] > 0;
+      const veel0 = counts[0] >= 2;
+      const ontbreekt2 = counts[2] === 0;
+      const ontbreekt5 = counts[5] === 0;
+
+      let openingsZin = "";
+      if (baseChakra === 5) {
+        openingsZin = `${displayName} kernenergie is verbonden met het keelchakra. Waar het voor veel mensen moeilijk is om hun waarheid te spreken, ligt hier juist jouw levenspad: leren vertrouwen op je eigen stem, je eigen waarheid en je eigen toon.`;
+      } else if (baseChakra === 7) {
+        openingsZin = `${displayName} kernenergie is verbonden met het kruinchakra. Je ziel zoekt betekenis, inzicht en een gevoel van samenhang. Je leeft niet alleen op de automatische piloot; je wilt begrijpen, doorzien en innerlijk groeien.`;
+      } else if (baseChakra === 4) {
+        openingsZin = `${displayName} kernenergie is verweven met het hartchakra. Verbinding, menselijkheid en zachtheid kleuren veel van wat je doet – zelfs als je dat aan de buitenkant niet altijd laat zien.`;
+      } else {
+        openingsZin = `${displayName} kernenergie is gekoppeld aan ${baseMeta.naam.toLowerCase()}. Dat betekent dat de thema&#39;s van dit chakra steeds terugkeren in je leven, als rode draad én als innerlijke gids.`;
+      }
+
+      let stabiliteitsZin = "";
+      if (veel1 || veel8) {
+        stabiliteitsZin = `In je energieveld is veel wortel- en 8-energie aanwezig. Dat maakt je tot iemand met een sterke ruggengraat: je blijft staan als het stormt, je draagt verantwoordelijkheid en je bent voor anderen vaak een veilig anker.`;
+      } else {
+        stabiliteitsZin = `Je verdeling van de cijfers is relatief gebalanceerd, wat wijst op een mens dat zich op meerdere levensgebieden tegelijk kan ontwikkelen. Geen enkel thema domineert alles; juist in de veelzijdigheid ligt jouw kracht.`;
+      }
+
+      let hartZin = "";
+      if (heeft4) {
+        hartZin = `Tegelijkertijd klopt er een duidelijke hartenergie onder de oppervlakte. Je kunt diep voelen, intens betrokken zijn en je hecht waarde aan echtheid in relaties. Je hart gaat open voor mensen die oprecht, warm en integer zijn.`;
+      } else {
+        hartZin = `Relaties en verbinding zijn voor jou belangrijk, maar je benadert ze eerder voorzichtig en stap voor stap dan impulsief. Je zoekt diepgang en betrouwbaarheid, eerder dan drama of heftigheid.`;
+      }
+
+      let gevoeligZin = "";
+      if (veel0) {
+        gevoeligZin = `De aanwezigheid van meerdere nullen wijst op een sterke gevoeligheid voor sfeer en energie. Je pikt veel op – ook wat niet wordt uitgesproken. Dat kan een groot geschenk zijn, maar vraagt óók om rust, gronding en bewuste zelfzorg.`;
+      } else {
+        gevoeligZin = `Je gevoeligheid is aanwezig, maar niet overweldigend. Je kunt goed schakelen tussen voelen en doen, zeker wanneer je genoeg rust en helderheid inbouwt in je dagelijks leven.`;
+      }
+
+      let emotieZin = "";
+      if (ontbreekt2 && ontbreekt5) {
+        emotieZin = `Op emotioneel vlak laat je niet alles meteen zien. Gevoelens hebben tijd nodig en woorden komen vaak later. Dat is geen tekort, maar een stijl: je innerlijke wereld beweegt trager en bedachtzamer. Je groei ligt in het toelaten van emotie én in het geven van kleine, eerlijke zinnen over wat er in je leeft.`;
+      } else if (ontbreekt2 && !ontbreekt5) {
+        emotieZin = `Je gevoel komt niet altijd direct aan de oppervlakte, maar als je ruimte voelt, kun je er wel woorden aan geven. Je leert gaandeweg dat je emotie niet eerst “af” hoeft te zijn om gedeeld te mogen worden.`;
+      } else {
+        emotieZin = `Je emotionele wereld is rijk, en met de nodige veiligheid durf je die ook te delen. Je uitdaging is niet zozeer voelen, maar balans vinden tussen betrokkenheid bij anderen en trouw blijven aan jezelf.`;
+      }
+
+      const padZin = `De eerste som van je geboortedatum is ${firstSum}. Dit getal laat zien welke spanning of samenwerking je in dit leven mag verkennen: de dialoog tussen de cijfers in de som en het basischakra. Het is alsof je ziel een bepaald thema heeft uitgekozen om telkens weer naar terug te keren, totdat het vertrouwd en eigen voelt.`;
+
+      const groeipadZin = `Je ziel lijkt niet zozeer te streven naar perfectie, maar naar echtheid. Niet naar “goed genoeg zijn voor anderen”, maar naar kloppen voor jezelf. Elke keer dat je kiest voor rust in plaats van haast, voor waarheid in plaats van aanpassen, voor zachtheid in plaats van hardheid tegen jezelf, kom je dichter bij dat innerlijke punt van thuiskomen.`;
+
+      return `
+        <h2>Sectie 4 – DeLuxe samenvattend rapport</h2>
+        <p>${openingsZin}</p>
+        <p>${stabiliteitsZin}</p>
+        <p>${hartZin}</p>
+        <p>${gevoeligZin}</p>
+        <p>${emotieZin}</p>
+        <p>${padZin}</p>
+        <p>${groeipadZin}</p>
+        <p>Gebruik dit rapport niet als vaste waarheid, maar als spiegel. Je bent altijd meer dan de cijfers van je geboortedatum. Zie de Chakra Code als een taal die woorden geeft aan wat je misschien al lang voelt, maar nog niet eerder zo precies kon benoemen.</p>
+        <div class="report-footer">
+          Rapport gegenereerd door <strong>nieuwealchemist.nl</strong>
+        </div>
+      `;
+    }
+
+    function buildReport(data) {
+      return [
+        section1_core(data),
+        section2_energy(data),
+        section3_psychology(data),
+        section4_deluxe(data)
+      ].join("");
+    }
+
+    function buildEmailSummary(data) {
+      const { name, dateDisplay, firstSum, baseChakra } = data;
+      const titleName = name && name.trim() ? name.trim() : "Deze persoon";
+
+      return `
+Chakra Code Rapport – Korte Samenvatting (nieuwealchemist.nl)
+
+Naam: ${titleName}
+Geboortedatum: ${dateDisplay}
+Eerste som: ${firstSum}
+Basischakra: ${baseChakra}
+
+Dit is een beknopte samenvatting van het chakra-profiel op basis van de geboortedatum.
+Op de website waar je dit rapport hebt aangemaakt, vind je de volledige DeLuxe analyse
+met energieprofiel, emotionele blauwdruk, relationele aspecten en innerlijk-kindlaag.
+
+Deze tekst is symbolisch en bedoeld als uitnodiging tot zelfinzicht en persoonlijke groei.
+
+Rapport gegenereerd door nieuwealchemist.nl
+      `.trim();
+    }
+
+    // --- UI LOGICA ---
+
+    const btn = document.getElementById("analyzeBtn");
+    const dobInput = document.getElementById("dob");
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const errorEl = document.getElementById("error");
+    const reportEl = document.getElementById("report");
+    const reportActions = document.getElementById("reportActions");
+    const printBtn = document.getElementById("printBtn");
+    const emailBtn = document.getElementById("emailBtn");
+
+    let lastAnalysis = null;
+
+    btn.addEventListener("click", () => {
+      errorEl.style.display = "none";
+      errorEl.textContent = "";
+      reportEl.style.display = "none";
+      reportEl.innerHTML = "";
+      reportActions.style.display = "none";
+      lastAnalysis = null;
+
+      const isoDate = dobInput.value;
+      if (!isoDate) {
+        errorEl.textContent = "Vul eerst een geldige geboortedatum in.";
+        errorEl.style.display = "block";
+        return;
+      }
+
+      try {
+        const data = analyzeDate(isoDate, nameInput.value);
+        const reportHtml = buildReport(data);
+        reportEl.innerHTML = reportHtml;
+        reportEl.style.display = "block";
+        reportActions.style.display = "flex";
+        lastAnalysis = data;
+      } catch (e) {
+        console.error(e);
+        errorEl.textContent = "Er ging iets mis bij het berekenen. Controleer de datum.";
+        errorEl.style.display = "block";
+      }
+    });
+
+    printBtn.addEventListener("click", () => {
+      if (!reportEl.innerHTML.trim()) return;
+      window.print(); // gebruiker kan "Opslaan als PDF" kiezen
+    });
+
+    emailBtn.addEventListener("click", () => {
+      if (!lastAnalysis) {
+        errorEl.textContent = "Genereer eerst een rapport voordat je een e-mail maakt.";
+        errorEl.style.display = "block";
+        return;
+      }
+      const to = emailInput.value.trim();
+      if (!to) {
+        errorEl.textContent = "Vul eerst een e-mailadres in waar de samenvatting naartoe mag.";
+        errorEl.style.display = "block";
+        return;
+      }
+      errorEl.style.display = "none";
+      errorEl.textContent = "";
+
+      const subject = "Chakra Code Rapport – Samenvatting (nieuwealchemist.nl)";
+      const body = buildEmailSummary(lastAnalysis);
+
+      const mailto = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailto;
+    });
+  </script>
+</body>
+</html>
